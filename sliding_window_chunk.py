@@ -2,6 +2,11 @@ from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import TextLoader
 
+# I CAN deterministically generate sliding window chunks with overlaps.
+# Use a langchain chunker / text-splitter to split the transcript and get the docs from it. 
+# WHAT metadata should I include? 
+# --------------------------------------------
+
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=200, 
     chunk_overlap=70, 

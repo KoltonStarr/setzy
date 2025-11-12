@@ -1,4 +1,4 @@
-CALL_SEGMENT_SYSTEM_PROMPT = """ You are responsible for ingesting setter call transcripts and outputting langchain
+CALL_PHASE_SYSTEM_PROMPT = """ You are responsible for ingesting setter call transcripts and outputting langchain
 Document objects where each document represents a natural phase of the call. 
 
 Your job is not to summarize the phases that you identify. You need to preserve the exact transcript portion 
