@@ -1,16 +1,10 @@
-import system_prompts
 from dotenv import load_dotenv
 from langchain_core.documents import Document
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from pydantic import BaseModel, Field
+from langchain_openai import OpenAIEmbeddings
 
 from transcript import Transcript
 from sliding_window_chunk import gen_sliding_window_documents
 from call_phase_chunk import CallPhaseChunker
-
-# I CAN deterministically create a chunk for the entire transcript with metadata.
-# WHAT metadata should I include? 
-# -----------------------------------------
 
 # todo 
 # I CANNOT deterministically generate documents for end-to-end question & answer cycles. 
