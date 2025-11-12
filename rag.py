@@ -1,4 +1,3 @@
-import json
 import system_prompts
 from dotenv import load_dotenv
 from langchain_core.documents import Document
@@ -7,7 +6,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from pydantic import BaseModel, Field
 
-from transcript_writer import TranscriptWriter
+from transcript import Transcript
 
 # I CAN deterministically create a chunk for the entire transcript with metadata.
 # WHAT metadata should I include? 
@@ -31,14 +30,14 @@ from transcript_writer import TranscriptWriter
 load_dotenv()
 call_identifier = "techno_guy"
 
-transcript_writer = TranscriptWriter("Darryl_Carter.mp3.json").write_transcript()
+transcript = Transcript("Darryl_Carter.mp3.json").write_transcript()
+transcript_text = transcript.transcript_text
 
 top_level_document = Document(
-    page_content=transcript, 
+    page_content=transcript_text, 
     metadata={
         "call_identifier": call_identifier,
         "type": "full_transcript",
-        "segment_count": len(segments),
 
         # Hierarchy markers
         "level_identifier": "L0",  # top of hierarchy
@@ -47,7 +46,7 @@ top_level_document = Document(
 )
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=70, add_start_index=True, length_function=len)
-raw_chunks = TextLoader("./transcripts/Darryl_Carter_transcript.txt").load()
+raw_chunks = TextLoader("./transcripts/Darryl_Carter.txt").load()
 sliding_window_documents = text_splitter.split_documents(raw_chunks)
 
 for i, document in enumerate(sliding_window_documents):
@@ -78,7 +77,7 @@ class ResponseFormat(BaseModel):
     call_phases: list[CallPhase] = Field(description="A list of call phases")
 
 # Read the transcript directly
-with open("./transcripts/Darryl_Carter_transcript.txt", "r") as f:
+with open("./transcripts/Darryl_Carter.txt", "r") as f:
     transcript_content = f.read()
 
 # Use LLM with structured output directly
@@ -90,7 +89,7 @@ response = llm_with_structure.invoke([
     {"role": "user", "content": f"Here is the transcript:\n\n{transcript_content}"}
 ])
 
-call_phase_documents = []
+call_phase_documents: list[Document] = []
 for i, call_phase in enumerate(response.call_phases):
     doc = Document(
         page_content=call_phase.transcript_text,
@@ -110,11 +109,14 @@ for i, call_phase in enumerate(response.call_phases):
     )
     call_phase_documents.append(doc)
 
-print(call_phase_documents[0])
-print("/n/n")
-print(call_phase_documents[1])
-print("/n/n")
-print(call_phase_documents[2])
+print(f"This is how many call phases there are: {len(call_phase_documents)}")
+print("***********************************************************************/n/n")
+
+print(call_phase_documents[0].page_content, call_phase_documents[0].metadata)
+print("***********************************************************************/n/n")
+print(call_phase_documents[1].page_content, call_phase_documents[1].metadata)
+print("***********************************************************************/n/n")
+print(call_phase_documents[2].page_content, call_phase_documents[2].metadata)
 
 
 
