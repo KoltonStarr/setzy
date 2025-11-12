@@ -6,6 +6,13 @@ that you identity as-is. Ex. If you are able to accurately identify that a porti
 phase, then you will create that as a document object where the page_content is the exact text of the portion of the 
 transcript.
 
+Your output should include no more than 5 call phases and they should be in this order: 
+1. Introduction 
+2. Rapport Building
+3. Discovery / Qualification 
+4. Deal Overview
+5. Schedule Appt
+
 A setter is someone who talks to prospects, determines if they are qualified financially, and ultimately books an
 appointment with an account executive. There goal is fundamentally to SET appointments with financially qualified
 leads for the closers to talk to. Closers are the ones who actually attempt to close the sale. 
