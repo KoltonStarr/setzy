@@ -1,8 +1,6 @@
 from pydantic import BaseModel, Field
 from langchain_core.documents import Document
-from langchain_core.language_models import LanguageModelInput
 from langchain_core.runnables import Runnable
-from langchain_core.utils.pydantic import _DictOrPydantic
 from langchain_openai import ChatOpenAI
 import system_prompts
 
@@ -27,10 +25,12 @@ class ResponseFormat(BaseModel):
 
 class CallPhaseChunker:
     transcript_text: str
-    llm: Runnable[LanguageModelInput, _DictOrPydantic]
+    call_identifier: str
+    llm: Runnable
 
     def __init__(self, transcript_text: str, call_identifier: str):
         self.transcript_text = transcript_text
+        self.call_identifier = call_identifier
         self._init_llm()
 
     def _init_llm(self) -> None:
@@ -49,7 +49,7 @@ class CallPhaseChunker:
             doc = Document(
                 page_content=call_phase.transcript_text,
                 metadata={
-                    "call_identifier": call_identifier,
+                    "call_identifier": self.call_identifier,
                     "type": "call_phase_chunk",
                     "total_chunks": len(raw_results.call_phases),
                     "chunk_index": i,  # Add explicit index too
