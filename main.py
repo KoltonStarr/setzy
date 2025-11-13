@@ -6,11 +6,6 @@ from transcript import Transcript
 from sliding_window_chunk import gen_sliding_window_documents
 from call_phase_chunk import CallPhaseChunker
 
-# todo 
-# I CANNOT deterministically generate documents for end-to-end question & answer cycles. 
-# -- Introduce an agent with the sole job of generating documents for each question and answer cycle. 
-# -- Include some prompting around ranting. 
-
 # Load ENV variables.
 load_dotenv()
 call_identifier = "techno_guy"
@@ -33,5 +28,8 @@ full_transcript_document = Document(
 sliding_window_documents = gen_sliding_window_documents(transcript.transcript_path, call_identifier)
 
 call_phase_documents = CallPhaseChunker(transcript.transcript_text, call_identifier).gen_call_phase_documents()
+
+# Create embeddings for all the documents.
+# Write the embeddings to a vector store.
 
 # embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
