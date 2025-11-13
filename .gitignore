@@ -10,3 +10,4 @@ __pycache__/
 # Data directories with sensitive audio and transcripts
 data/
 transcripts/
+vector_store/
