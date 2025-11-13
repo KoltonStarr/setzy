@@ -22,7 +22,8 @@ audio_files = audio_file_manager.audio_files
 config = aai.TranscriptionConfig(
     speech_model=aai.SpeechModel.universal,
     speaker_labels=True,
-    speakers_expected=2
+    speakers_expected=2,
+    disfluencies=True
 )
 
 for file in audio_files:
