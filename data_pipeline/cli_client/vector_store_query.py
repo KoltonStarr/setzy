@@ -6,7 +6,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
-from logger import log
+from data_pipeline.logger import log
 from dotenv import load_dotenv
 
 load_dotenv()

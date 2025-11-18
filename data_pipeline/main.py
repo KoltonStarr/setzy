@@ -8,8 +8,11 @@ import os
 import assemblyai as aai
 from audio_file_manager import AudioFileManager
 from diarizer import AudioDiarizer
-from transcript import Transcript
+from data_pipeline.transcript import Transcript
 from dotenv import load_dotenv
+from embedder import Embedder
+from langchain_openai import OpenAIEmbeddings
+from langchain_chroma import Chroma
 
 # Load ENV vars.
 load_dotenv()
@@ -35,3 +38,21 @@ for file in enumerate(diarized_file_names):
 
     transcript = Transcript(file).write_transcript()
     transcript_text = transcript.transcript_text
+
+    embedder = Embedder(call_identifier, transcript)
+
+    full_transcript_document = embedder.gen_full_transcript_doc()
+    sliding_window_documents = embedder.gen_sliding_window_documents()
+    call_phase_documents = embedder.gen_call_phase_documents()
+
+    all_documents = [full_transcript_document] + sliding_window_documents + call_phase_documents
+
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+
+    vector_store = Chroma(
+        collection_name="sales_calls",
+        embedding_function=embeddings,
+        persist_directory="./vector_store",  # Where to save data locally, remove if not necessary
+    )
+
+    ids = vector_store.add_documents(documents=all_documents)
