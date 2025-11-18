@@ -5,16 +5,21 @@ import json
 # This class is responsible for:
 # -- Taking audio files and outputting diarized json files from them.
 class AudioDiarizer:
-    audio_files: list[str]
-    config: aai.TranscriptionConfig
+    _audio_files: list[str]
+    _diarized_audio_files: list[str]
+    _config: aai.TranscriptionConfig
+
+    @property
+    def diarized_audio_files(self) -> list[str]:
+        return self._diarized_audio_files
 
     def __init__(self, audio_files: list[str]):
-        self.audio_files = audio_files
+        self._audio_files = audio_files
         self._init_config()
 
     # Initialize AssemblyAI Configuration.
     def _init_config(self) -> None:
-        self.config = aai.TranscriptionConfig(
+        self._config = aai.TranscriptionConfig(
             speech_model=aai.SpeechModel.universal,
             speaker_labels=True,
             speakers_expected=2,
@@ -23,7 +28,7 @@ class AudioDiarizer:
 
     # 
     def _generate_transcript(self, audio_file: str) -> Transcript:
-        transcript = aai.Transcriber(config=self.config).transcribe(audio_file)
+        transcript = aai.Transcriber(config=self._config).transcribe(audio_file)
         if transcript.status == "error":
             raise RuntimeError(f"Transcription failed: {transcript.error}")
         print("Transcription completed.")
@@ -46,7 +51,7 @@ class AudioDiarizer:
         }
 
     def diarize_audio_files(self) -> None:
-        for file in self.audio_files:
+        for file in self._audio_files:
             with open(file, "rb") as audio_file:
                 print(f"Beginning diarization of {file}")
 
@@ -56,6 +61,8 @@ class AudioDiarizer:
                 diarized_file_name = f"{file}.json"
                 with open(diarized_file_name, 'w') as f:
                     json.dump(diarized_data, f, indent=2)
+
+                self._diarized_audio_files.append(diarized_file_name)
 
                 print(f"{diarized_file_name} CREATED.")
 

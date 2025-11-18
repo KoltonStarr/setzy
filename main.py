@@ -11,11 +11,11 @@ from logger import log
 
 # Load ENV variables.
 load_dotenv()
-call_identifier = "techno_guy"
+# call_identifier = "techno_guy"
 
-log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< BEGIN: Generate and Write Transcript >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", "yellow")
-transcript = Transcript("Darryl_Carter.mp3.json").write_transcript()
-transcript_text = transcript.transcript_text
+# log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< BEGIN: Generate and Write Transcript >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", "yellow")
+# transcript = Transcript("Darryl_Carter.mp3.json").write_transcript()
+# transcript_text = transcript.transcript_text
 
 log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< BEGIN: Generate full_transcript and sliding_window Documents >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", "yellow")
 full_transcript_document = Document(

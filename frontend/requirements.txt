@@ -1,0 +1,9 @@
+Requirements:
+- We need a nice file uploader for uploading multiple files.
+- Configure google as OIDC provider for login.
+- A section for AI chat / asking questions about call data.
+- Frontend needs to compile to static web assets. No webserver needed. 
+- We need an nginx based container image to containerize the frontend.
+-- Start with a base nginx image from docker hub. 
+-- Develop the docker file to build an image for the frontend.
+-- Should be able to to run that container and have the frontend fully working. 
