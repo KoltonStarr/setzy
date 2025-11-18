@@ -3,27 +3,30 @@ import json
 
 class Transcript:
     # Static for now.
-    data_directory = "./data"
-    transcripts_directory = "./transcripts"
+    data_dir: str
+    transcripts_dir: str
 
     diarized_json_filename: str
 
     _transcript_text: str
     _transcript_path: str
 
-    def __init__(self, diarized_json_filename: str):
+    def __init__(self, diarized_json_filename: str, data_dir: str, transcripts_dir: str):
         self.diarized_json_filename = diarized_json_filename
+        self.data_dir = data_dir 
+        self.transcripts_dir = transcripts_dir
+
         self._create_transcript()
         self._set_transcript_path()
 
     # Check to ensure that the given json file exists in the data dir.
     def _file_exists(self) -> bool:
-        return Path(f"{self.data_directory}/{self.diarized_json_filename}").exists()
+        return Path(f"{self.data_dir}/{self.diarized_json_filename}").exists()
     
     # Sets the path for the transcript.
     def _set_transcript_path(self) -> None:
         transcript_filename = f"{self.diarized_json_filename.split(".")[0]}.txt"
-        self._transcript_path = f"{self.transcripts_directory}/{transcript_filename}"
+        self._transcript_path = f"{self.transcripts_dir}/{transcript_filename}"
     
     def _create_transcript(self) -> str:
         # Check if json file exists and throw error if it doesn't.
@@ -31,7 +34,7 @@ class Transcript:
             raise FileNotFoundError("File does not exist! Unable to create transcript.")
         
         # Open the diarized JSON file.
-        with open(f"{self.data_directory}/{self.diarized_json_filename}") as f:
+        with open(f"{self.data_dir}/{self.diarized_json_filename}") as f:
             data = json.load(f)
         
         # Mutate the format line by line.
