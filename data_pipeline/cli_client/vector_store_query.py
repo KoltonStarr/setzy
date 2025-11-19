@@ -6,18 +6,18 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
-from data_pipeline.logger import log
+import os
+from logger import log
 from dotenv import load_dotenv
-
 load_dotenv()
-
+    
+persist_directory = os.getenv("VECTOR_STORE_PERSIST_DIRECTORY")
 embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
-# This connects to existing store - does NOT create new one
 vector_store = Chroma(
     collection_name="sales_calls",
     embedding_function=embeddings,
-    persist_directory="../vector_store"
+    persist_directory=persist_directory,  # Where to save data locally, remove if not necessary
 )
 
 log("What would you ike to search for?", "white")
@@ -26,9 +26,11 @@ search_query = input("> ")
 log("How many k-nearest-neighbors do you want?", "white")
 k_value = int(input("> "))
 
-results = vector_store.similarity_search(
+documents = vector_store.similarity_search(
     f"{search_query}",
     k=k_value
 )
 
-print(results)
+for doc in documents:
+    print(f"Type: {doc.metadata['type']}")
+    print(f"Source: {doc.metadata['call_identifier']}")
