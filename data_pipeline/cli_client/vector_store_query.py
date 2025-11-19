@@ -32,5 +32,6 @@ documents = vector_store.similarity_search(
 )
 
 for doc in documents:
-    print(f"Type: {doc.metadata['type']}")
-    print(f"Source: {doc.metadata['call_identifier']}")
+    log(f"Type: {doc.metadata['type']}")
+    log(f"Source: {doc.metadata['call_identifier']}")
+    log("-----------------------", "blue")
