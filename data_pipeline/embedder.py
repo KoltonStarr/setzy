@@ -1,4 +1,4 @@
-from data_pipeline.transcript import Transcript
+from transcript import Transcript
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import TextLoader
 from langchain_core.documents import Document
@@ -38,10 +38,10 @@ class Embedder:
     
     # Generates fixed chunk documents with slight character overlap.
     def gen_sliding_window_documents(self) -> list[Document]:
-        transcript_path = self._transcript.transcript_path
+        transcript_filepath = self._transcript.transcript_filepath
         call_identifier = self._call_identifier
 
-        raw_chunks = TextLoader(transcript_path).load()
+        raw_chunks = TextLoader(transcript_filepath).load()
         sliding_window_documents = text_splitter.split_documents(raw_chunks)
 
         for i, document in enumerate(sliding_window_documents):

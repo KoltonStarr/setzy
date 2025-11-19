@@ -1,12 +1,13 @@
 import assemblyai as aai
 from assemblyai import Transcript
+import os
 import json
 
 # This class is responsible for:
 # -- Taking audio files and outputting diarized json files from them.
 class AudioDiarizer:
-    _audio_files: list[str]
-    _diarized_audio_files: list[str]
+    _audio_files: list[str] = []
+    _diarized_audio_files: list[str] = []
     _config: aai.TranscriptionConfig
 
     @property
@@ -52,17 +53,20 @@ class AudioDiarizer:
 
     def diarize_audio_files(self) -> None:
         for file in self._audio_files:
-            with open(file, "rb") as audio_file:
-                print(f"Beginning diarization of {file}")
+            print(f"Beginning diarization of {file}")
+            diarized_file_name = f"{file}.json"
+            self.diarized_audio_files.append(diarized_file_name)
 
+            # If the diarized file already exists then skip.
+            if os.path.exists(diarized_file_name):
+                print(f"{diarized_file_name} already exists!")
+                continue
+
+            with open(file, "rb") as audio_file:
                 transcript = self._generate_transcript(audio_file)
                 diarized_data = self._generate_diarized_json(transcript)
-
-                diarized_file_name = f"{file}.json"
                 with open(diarized_file_name, 'w') as f:
                     json.dump(diarized_data, f, indent=2)
-
-                self._diarized_audio_files.append(diarized_file_name)
 
                 print(f"{diarized_file_name} CREATED.")
 
