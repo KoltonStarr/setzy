@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from langchain_core.documents import Document
 from langchain_core.runnables import Runnable
 from langchain_openai import ChatOpenAI
-import system_prompts as system_prompts
+import data_pipeline.system_prompt as system_prompt
 
 # I CANNOT deterministically generate documents that represent core sections of the call. 
 # -- Figure out what Sabrina's framework is for sections of the call. 
@@ -39,7 +39,7 @@ class CallPhaseChunker:
 
     def _get_raw_results(self):
         return self.llm.invoke([
-            {"role": "system", "content": system_prompts.CALL_PHASE_SYSTEM_PROMPT},
+            {"role": "system", "content": system_prompt.CALL_PHASE_SYSTEM_PROMPT},
             {"role": "user", "content": f"Here is the transcript:\n\n{self.transcript_text}"}
         ])
     
