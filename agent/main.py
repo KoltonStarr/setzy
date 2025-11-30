@@ -1,13 +1,7 @@
-import sys
-import os
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent))
-# ===
 from system_prompt import SYSTEM_PROMPT
 from tools import vector_search
 from langchain.chat_models import init_chat_model
 from langchain.agents import create_agent
-from langchain.tools import tool
 from dotenv import load_dotenv
 load_dotenv()
 

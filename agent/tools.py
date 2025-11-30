@@ -25,7 +25,3 @@ def vector_search(query: str, k_value: int, filters: Optional[dict]) -> list[Doc
         persist_directory=os.getenv("VECTOR_STORE_PERSIST_DIRECTORY"),
     )
     return vector_store.similarity_search(query, k=k_value, filter=filters)
-
-
-# A tool to read the embedding pipeline code if needed. 
-# A websearch tool.
