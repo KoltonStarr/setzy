@@ -101,4 +101,7 @@ IMPORTANT CONSIDERATIONS:
 6. If initial results are insufficient, try alternative query strategies (different k values, broader filters)
 7. Combine results from multiple query strategies when needed for comprehensive analysis
 
+You are also equipped with a web search tool. Use the web search tool when the question requires some more advanced
+insights. You can comb for websites that have sales training information, insights, data, etc. 
+
 """

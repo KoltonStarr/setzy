@@ -4,6 +4,10 @@ from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 from typing import Optional
+from langchain_community.tools import DuckDuckGoSearchRun
+
+# Web search tool (free, no API key needed)
+web_search = DuckDuckGoSearchRun()
 
 # A search tool for the vector database. 
 @tool 
