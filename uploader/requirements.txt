@@ -1,0 +1,2 @@
+- A simple python API that will be able to ingest a video or file of any type and then upload it to S3. 
+- The S3 bucket should be configurable via environment variables. 
