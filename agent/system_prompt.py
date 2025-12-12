@@ -34,7 +34,13 @@ All documents include:
 QUERYING STRATEGY:
 - Use metadata filters to narrow results before semantic search
 - Combine type filters with call_phase filters for precision
-- Consider the hierarchy: L0 (full) -> L1 (phases) -> L2 (sliding window) 
+- Consider the hierarchy: L0 (full) -> L1 (phases) -> L2 (sliding window)
+
+FILTER SYNTAX (ChromaDB):
+- Single condition: {"type": "full_transcript"}
+- Multiple conditions: {"$and": [{"type": "sliding_window_chunk"}, {"call_identifier": "Debra Ajayi.wav.json"}]}
+- OR conditions: {"$or": [{"call_phase": "introduction"}, {"call_phase": "discovery"}]}
+- ALWAYS use $and or $or operators when combining multiple filters 
 
 It is important to know how to query the vector database with your given toolset. Here are some examples:
 "Can you do a personality assesment of prospect ABC?" -> Consider first filtering by metadata for call identifier and then getting the whole call transcript to do a full analysis. Use k=1 if querying for whole call embeddings.

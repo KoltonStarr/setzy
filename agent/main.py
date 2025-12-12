@@ -14,4 +14,7 @@ for event in agent.stream(
     {"messages": [{"role": "user", "content": user_query}]},
     stream_mode="values",
 ):
-    event["messages"][-1].pretty_print()
+    msg = event["messages"][-1]
+    # Skip tool messages to avoid cluttering output with vector store results
+    if msg.type != "tool":
+        msg.pretty_print()
