@@ -1,0 +1,27 @@
+A lightweight API.
+
+Functional Requirements:
+- There should be a route that can ingest any audio file. It should be performant as some of the audio 
+files are pretty large. 
+- The audio ingest route should check to ensure that it is in fact a audio file. Some sort of validation 
+needs to be run on the content. 
+- The audio ingest route should then upload the audio file to a configured S3 bucket preserving then name
+of the file. 
+- The API will know about the S3 bucket via environment variables. The s3 bucket would ideally be 
+configured in a .env file or something like that so the code is not hard coded with S3 bucket.
+
+- There should be a route that returns a list of audio files that the user has upaloaded. This will just return the 
+file names NOT the actual file content. This will be used for some display on the UI most likely. Maybe like a list 
+of UI cards with the file names on them just so the user knows what they have available. 
+
+- There should be a route to GET a SINGLE audio. For now, I don't want to be retrieving big audio files in bulk. Just 
+one. This route will probably be used by the ui when the user clicks on one of their calls and then they can actually 
+listen to it.
+
+Engineering Requirements:
+- Needs to be containerized. 
+- Programming language doesn't matter. 
+
+Nice to Have:
+- If it could be protected by oauth / OIDC that would be great. The frontend logs users in with google oidc. so if the 
+backend would ONLY accept tokens from google oidc that would be great for security. 
