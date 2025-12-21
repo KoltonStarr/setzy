@@ -1,4 +1,5 @@
 import os
+import chromadb
 from langchain.tools import tool
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
@@ -26,9 +27,15 @@ def vector_search(query: str, k_value: int, filters: Optional[dict]) -> list[Doc
     Returns:
         list[Document]
     """
+    # Connect to remote ChromaDB server
+    chroma_client = chromadb.HttpClient(
+        host=os.getenv("CHROMADB_HOST", "localhost"),
+        port=int(os.getenv("CHROMADB_PORT", "8000"))
+    )
+    
     vector_store = Chroma(
+        client=chroma_client,
         collection_name="sales_calls",
         embedding_function=OpenAIEmbeddings(model="text-embedding-3-large"),
-        persist_directory=os.getenv("VECTOR_STORE_PERSIST_DIRECTORY"),
     )
     return vector_store.similarity_search(query, k=k_value, filter=filters)

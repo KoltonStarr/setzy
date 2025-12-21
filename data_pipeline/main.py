@@ -1,4 +1,5 @@
 import os
+import chromadb
 import assemblyai as aai
 from audio_file_manager import AudioFileManager
 from diarizer import AudioDiarizer
@@ -14,7 +15,6 @@ load_dotenv()
 data_dir = os.getenv("DATA_DIR")
 transcripts_dir = os.getenv("TRANSCRIPTS_DIR")
 s3_bucket_name = os.getenv("S3_BUCKET_NAME")
-persist_directory = os.getenv("VECTOR_STORE_PERSIST_DIRECTORY")
 aai.settings.api_key = os.getenv("ASSEMBLYAI_API_KEY")
 
 # Create the directories if they do not exist.
@@ -56,10 +56,16 @@ for file in diarized_file_names:
     all_documents = [full_transcript_document] + sliding_window_documents + call_phase_documents
     embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
+    # Connect to remote ChromaDB server
+    chroma_client = chromadb.HttpClient(
+        host=os.getenv("CHROMADB_HOST", "localhost"),
+        port=int(os.getenv("CHROMADB_PORT", "8000"))
+    )
+    
     vector_store = Chroma(
+        client=chroma_client,
         collection_name="sales_calls",
         embedding_function=embeddings,
-        persist_directory=persist_directory,  # Where to save data locally, remove if not necessary
     )
 
     ids = vector_store.add_documents(documents=all_documents)

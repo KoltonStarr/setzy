@@ -4,6 +4,7 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+import chromadb
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
 import os
@@ -11,13 +12,18 @@ from logger import log
 from dotenv import load_dotenv
 load_dotenv()
     
-persist_directory = os.getenv("VECTOR_STORE_PERSIST_DIRECTORY")
 embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
+# Connect to remote ChromaDB server
+chroma_client = chromadb.HttpClient(
+    host=os.getenv("CHROMADB_HOST", "localhost"),
+    port=int(os.getenv("CHROMADB_PORT", "8000"))
+)
+
 vector_store = Chroma(
+    client=chroma_client,
     collection_name="sales_calls",
     embedding_function=embeddings,
-    persist_directory=persist_directory,  # Where to save data locally, remove if not necessary
 )
 
 log("What would you ike to search for?", "white")
