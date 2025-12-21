@@ -20,9 +20,9 @@ def vector_search(query: str, k_value: int, filters: Optional[dict]) -> list[Doc
         k_value (int): Number of k-nearest neighbors
         vector_store (Chroma): A full chroma instance.
         filters: metadata filters for the query to the vector store.
-            For multiple conditions, use ChromaDB operators:
-            - Single condition: {"type": "full_transcript"}
-            - Multiple conditions: {"$and": [{"type": "sliding_window_chunk"}, {"call_identifier": "xyz"}]}
+            For single conditions: {"type": "full_transcript"}
+            For multiple conditions: {"$and": [{"type": "sliding_window_chunk"}, {"call_identifier": "xyz"}]}
+            IMPORTANT: Only use $and or $or with TWO OR MORE conditions. Single conditions must be passed as a dict without operators.
     
     Returns:
         list[Document]

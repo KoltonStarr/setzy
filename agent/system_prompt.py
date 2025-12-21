@@ -38,9 +38,9 @@ QUERYING STRATEGY:
 
 FILTER SYNTAX (ChromaDB):
 - Single condition: {"type": "full_transcript"}
-- Multiple conditions: {"$and": [{"type": "sliding_window_chunk"}, {"call_identifier": "Debra Ajayi.wav.json"}]}
-- OR conditions: {"$or": [{"call_phase": "introduction"}, {"call_phase": "discovery"}]}
-- ALWAYS use $and or $or operators when combining multiple filters 
+- Multiple conditions with AND: {"$and": [{"type": "sliding_window_chunk"}, {"call_identifier": "Debra Ajayi.wav.json"}]}
+- Multiple conditions with OR: {"$or": [{"call_phase": "introduction"}, {"call_phase": "discovery"}]}
+- CRITICAL: Only use $and or $or when you have TWO OR MORE conditions. For a single condition, pass the dict directly without $and or $or 
 
 It is important to know how to query the vector database with your given toolset. Here are some examples:
 "Can you do a personality assesment of prospect ABC?" -> Consider first filtering by metadata for call identifier and then getting the whole call transcript to do a full analysis. Use k=1 if querying for whole call embeddings.
