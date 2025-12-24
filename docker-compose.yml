@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 services:
   # OpenTelemetry Collector for observability
   otel-collector:
@@ -54,10 +55,59 @@ services:
       - chromadb
     stdin_open: true
     tty: true
+=======
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_USE_MOCK_API=false
+        - VITE_API_BASE_URL=http://backend:8000/api
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - setzy-network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME:-your-bucket-name}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+    networks:
+      - setzy-network
+    restart: unless-stopped
+    volumes:
+      - ./backend:/app
+      # Add other volumes as needed
+
+  # Optional: Add other services like data_pipeline, agent, etc.
+  # data-pipeline:
+  #   build:
+  #     context: ./data_pipeline
+  #   environment:
+  #     - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+  #   networks:
+  #     - setzy-network
+>>>>>>> connor-frontend
 
 networks:
   setzy-network:
     driver: bridge
 
+<<<<<<< HEAD
 volumes:
   chroma_data:
+=======
+>>>>>>> connor-frontend
