@@ -1,0 +1,63 @@
+services:
+  # OpenTelemetry Collector for observability
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.111.0
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./vector_db/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    networks:
+      - setzy-network
+
+  # Zipkin for distributed tracing
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    depends_on:
+      - otel-collector
+    networks:
+      - setzy-network
+
+  # ChromaDB vector database
+  chromadb:
+    image: chromadb/chroma
+    container_name: chromadb
+    volumes:
+      - ./vector_db/storage:/data
+      - ./vector_db/config.yaml:/config.yaml
+    ports:
+      - "8000:8000"
+    networks:
+      - setzy-network
+    environment:
+      - CHROMA_OPEN_TELEMETRY__ENDPOINT=http://otel-collector:4317/
+      - CHROMA_OPEN_TELEMETRY__SERVICE_NAME=chroma
+    depends_on:
+      - otel-collector
+      - zipkin
+
+
+  # Setzy Agent
+  agent:
+    build:
+      context: .
+      dockerfile: ./agent/Dockerfile
+    container_name: setzy-agent
+    env_file:
+      - .env
+    environment:
+      - CHROMADB_HOST=chromadb
+      - CHROMADB_PORT=8000
+    networks:
+      - setzy-network
+    depends_on:
+      - chromadb
+    stdin_open: true
+    tty: true
+
+networks:
+  setzy-network:
+    driver: bridge
+
+volumes:
+  chroma_data:
