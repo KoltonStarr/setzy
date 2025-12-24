@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from langchain_core.documents import Document
 from langchain_core.runnables import Runnable
 from langchain_openai import ChatOpenAI
-import data_pipeline.system_prompt as system_prompt
+import system_prompt
 
 # I CANNOT deterministically generate documents that represent core sections of the call. 
 # -- Figure out what Sabrina's framework is for sections of the call. 

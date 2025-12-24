@@ -34,10 +34,32 @@ audio_diarizer.diarize_audio_files()
 diarized_file_names = audio_diarizer.diarized_audio_files
 log("Finished.", "green")
 
+# Connect to remote ChromaDB server
+chroma_client = chromadb.HttpClient(
+    host=os.getenv("CHROMADB_HOST", "localhost"),
+    port=int(os.getenv("CHROMADB_PORT", "8000"))
+)
+
+# Create a vector store client.
+vector_store = Chroma(
+    client=chroma_client,
+    collection_name="sales_calls",
+    embedding_function=OpenAIEmbeddings(model="text-embedding-3-large"),
+)
 
 for file in diarized_file_names:
     split_path = file.split("/")
     call_identifier = split_path[len(split_path) - 1]
+
+    # Check if this call_identifier already exists in the vector store
+    existing_docs = vector_store.get(
+        where={"call_identifier": call_identifier},
+        limit=1
+    )
+    
+    if existing_docs['ids']:
+        log(f"Skipping {call_identifier} - already embedded in vector store", "blue")
+        continue
 
     log(f"Generating transcript for: {file}", "yellow")
     transcript = Transcript(file, data_dir, transcripts_dir).write_transcript()
@@ -54,19 +76,6 @@ for file in diarized_file_names:
 
     log("Creating and storing embeddings...", "yellow")
     all_documents = [full_transcript_document] + sliding_window_documents + call_phase_documents
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
-
-    # Connect to remote ChromaDB server
-    chroma_client = chromadb.HttpClient(
-        host=os.getenv("CHROMADB_HOST", "localhost"),
-        port=int(os.getenv("CHROMADB_PORT", "8000"))
-    )
-    
-    vector_store = Chroma(
-        client=chroma_client,
-        collection_name="sales_calls",
-        embedding_function=embeddings,
-    )
 
     ids = vector_store.add_documents(documents=all_documents)
     log("Finished.", "green")
