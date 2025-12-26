@@ -1,20 +1,57 @@
 from system_prompt import SYSTEM_PROMPT
+from logger import log
 from tools import vector_search, web_search
 from langchain.chat_models import init_chat_model
 from langchain.agents import create_agent
+from langchain.messages import ToolMessage, AIMessage, HumanMessage
 from dotenv import load_dotenv
 load_dotenv()
 
+max_iterations = 5
 agent = create_agent(init_chat_model("gpt-5"), tools=[vector_search, web_search], system_prompt=SYSTEM_PROMPT)
 
-print("What would you like to search for?")
-user_query = input("> ")
+print("Type q to quit at any time.")
+print("How can I help you?")
+messages = []
 
-for event in agent.stream(
-    {"messages": [{"role": "user", "content": user_query}]},
-    stream_mode="values",
-):
-    msg = event["messages"][-1]
-    # Skip tool messages to avoid cluttering output with vector store results
-    if msg.type != "tool":
-        msg.pretty_print()
+iteration = 1
+while iteration <= 5:
+    # Get the user's input.
+    user_query = input("> ")
+    messages.append({"role": "user", "content": user_query})
+    if user_query == "q":
+        break
+    
+    last_event = None
+    for event in agent.stream({"messages": messages}, stream_mode="values"):
+        last_event = event 
+        # Every event carries all previous messages.
+        msg: ToolMessage | AIMessage | HumanMessage = event["messages"][-1]
+
+        match msg.type:
+            case "human":
+                log("================================ 👤 Human Message 👤 ================================= \n")
+                log(msg.content)
+            case "ai":
+                log("================================== 🤖 Ai Message 🤖 ================================== \n ", "blue")
+                if msg.content:
+                    log(msg.content, "blue")
+                else:
+                    log("I need to use a tool.", "blue")
+            case "tool":
+                log("================================== 🛠️ Tool Message 🛠️ ================================== \n", "yellow")
+                tool_call = msg.to_json()["kwargs"]
+                log("Name: " + tool_call["name"], "yellow")
+                log("Status: " + tool_call["status"], "yellow")
+            case _:
+                log("Unknown MSG type.")
+        print("\n")
+
+    # At this point. All events are done emitting. The last_event will contain the last event that was emitted.
+    # That event should have ALL the messages needed for the next run. Context should be set.
+    messages = last_event["messages"]
+    print("Length of MSGs is: ", len(messages))
+    
+    iteration += 1
+    
+log("Goodbye!!")
