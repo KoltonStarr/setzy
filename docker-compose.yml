@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 services:
   # OpenTelemetry Collector for observability
   otel-collector:
@@ -37,7 +36,6 @@ services:
       - otel-collector
       - zipkin
 
-
   # Setzy Agent
   agent:
     build:
@@ -55,10 +53,7 @@ services:
       - chromadb
     stdin_open: true
     tty: true
-=======
-version: '3.8'
-
-services:
+  
   frontend:
     build:
       context: ./frontend
@@ -90,24 +85,10 @@ services:
     restart: unless-stopped
     volumes:
       - ./backend:/app
-      # Add other volumes as needed
-
-  # Optional: Add other services like data_pipeline, agent, etc.
-  # data-pipeline:
-  #   build:
-  #     context: ./data_pipeline
-  #   environment:
-  #     - S3_BUCKET_NAME=${S3_BUCKET_NAME}
-  #   networks:
-  #     - setzy-network
->>>>>>> connor-frontend
 
 networks:
   setzy-network:
     driver: bridge
 
-<<<<<<< HEAD
 volumes:
   chroma_data:
-=======
->>>>>>> connor-frontend
