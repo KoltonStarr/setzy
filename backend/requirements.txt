@@ -10,7 +10,8 @@ of the file.
 - The API will know about the S3 bucket via environment variables. The s3 bucket would ideally be 
 configured in a .env file or something like that so the code is not hard coded with S3 bucket.
 
-- There should be a route that returns a list of audio files that the user has upaloaded. This will just return the 
+================= Might Change 
+- There should be a route that returns a list of audio files that the user has uploaded. This will just return the 
 file names NOT the actual file content. This will be used for some display on the UI most likely. Maybe like a list 
 of UI cards with the file names on them just so the user knows what they have available. 
 
