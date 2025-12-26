@@ -51,5 +51,5 @@ while iteration <= 5:
     # That event should have ALL the messages needed for the next run. Context should be set.
     messages = last_event["messages"]
     iteration += 1
-    
+
 log("Goodbye!!")
