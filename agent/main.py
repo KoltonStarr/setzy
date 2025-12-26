@@ -50,8 +50,6 @@ while iteration <= 5:
     # At this point. All events are done emitting. The last_event will contain the last event that was emitted.
     # That event should have ALL the messages needed for the next run. Context should be set.
     messages = last_event["messages"]
-    print("Length of MSGs is: ", len(messages))
-    
     iteration += 1
     
 log("Goodbye!!")
