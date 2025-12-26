@@ -6,8 +6,6 @@ embedding process. This way other orgs can ensure that their calls are understoo
 
 ## To Do (Data Pipeline)
 - Refactor the data pipeline to be a long-running process that polls an SQS queue for new audio files to embed. 
-- Add some logic to the data pipeline to check if a filename for the call already exists in the vector database. If it does, it should
-not attempt 
 - Refactor the data pipeline to process 10 calls at once with two concurrent threads (5 each thread) then start another batch until all
 have been processed.
 - Refactor the data pipeline to clear out the data dir and transcripts dir when a batch is done.
