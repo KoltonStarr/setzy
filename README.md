@@ -1,6 +1,5 @@
 ## To Do (Agent)
 - Allow the agent to be accessed via API and CLI.
-- Add logic such that the agent doesn't terminate after just one query / response cycle. 
 - Make the system prompt more configurable and dynamic (call phases, type of call) and have that flow into the chunking and 
 embedding process. This way other orgs can ensure that their calls are understood by the agent in a way that is specific to them.
 
