@@ -1,5 +1,12 @@
 ## To Do (Agent)
-- Allow the agent to be accessed via API and CLI.
+- Allow the agent to be accessed via and API or remote call. 
+-- Look into using FastAPI to create an HTTP layer around the agent.
+-- The endpoint should accept a single user prompt as the main parameter / body. 
+-- The endpoint should only return the answer that is due the user. What the client decides to do with all of 
+the back and forth is up to the client. But the endpoint will only accept the one query. 
+-- The agent will obviously be taking the individual queries and remembering them in-memory so that an 
+adequate flow of back-and-forth can occur. 
+
 - Make the system prompt more configurable and dynamic (call phases, type of call) and have that flow into the chunking and 
 embedding process. This way other orgs can ensure that their calls are understood by the agent in a way that is specific to them.
 
