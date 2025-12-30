@@ -30,16 +30,16 @@ while iteration <= 5:
 
         match msg.type:
             case "human":
-                log("================================ 👤 Human Message 👤 ================================= \n")
+                log("================================ 👤 Human Message 👤 =================================")
                 log(msg.content)
             case "ai":
-                log("================================== 🤖 Ai Message 🤖 ================================== \n ", "blue")
+                log("================================== 🤖 Ai Message 🤖 ==================================", "blue")
                 if msg.content:
                     log(msg.content, "blue")
                 else:
                     log("I need to use a tool.", "blue")
             case "tool":
-                log("================================== 🛠️ Tool Message 🛠️ ================================== \n", "yellow")
+                log("================================== 🛠️ Tool Message 🛠️ ==================================", "yellow")
                 tool_call = msg.to_json()["kwargs"]
                 log("Name: " + tool_call["name"], "yellow")
                 log("Status: " + tool_call["status"], "yellow")
