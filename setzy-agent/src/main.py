@@ -8,7 +8,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 max_iterations = 5
-agent = create_agent(init_chat_model("gpt-5"), tools=[vector_search, web_search], system_prompt=SYSTEM_PROMPT)
+agent = create_agent(
+    init_chat_model("gpt-5"), 
+    tools=[vector_search, web_search], 
+    system_prompt=SYSTEM_PROMPT
+)
 
 print("Type q to quit at any time.")
 print("How can I help you?")
