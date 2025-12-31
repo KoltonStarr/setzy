@@ -1,3 +1,5 @@
+from langchain.messages import ToolMessage, AIMessage, HumanMessage
+
 def log(message: str, color: str = "white") -> None:
     """Print colored text to the terminal.
     
@@ -18,3 +20,22 @@ def log(message: str, color: str = "white") -> None:
     reset = "\033[0m"
     color_code = colors.get(color.lower(), colors["white"])
     print(f"{color_code}{message}{reset}")
+
+def log_agent_msg(msg: ToolMessage | AIMessage | HumanMessage) -> None: 
+    match msg.type:
+        case "human":
+            log("================================ 👤 Human Message 👤 =================================")
+            log(msg.content)
+        case "ai":
+            log("================================== 🤖 Ai Message 🤖 ==================================", "blue")
+            if msg.content:
+                log(msg.content, "blue")
+            else:
+                log("I need to use a tool.", "blue")
+        case "tool":
+            log("================================== 🛠️ Tool Message 🛠️ ==================================", "yellow")
+            tool_call = msg.to_json()["kwargs"]
+            log("Name: " + tool_call["name"], "yellow")
+            log("Status: " + tool_call["status"], "yellow")
+        case _:
+            log("Unknown MSG type.")
