@@ -1,6 +1,6 @@
 # Commands
 ```python
-fastapi dev ./src/api.py
+fastapi dev ./src/main.py
 ```
 
 ```python

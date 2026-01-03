@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from uuid import uuid4
 
 from system_prompt import SYSTEM_PROMPT
-from logger import log, log_agent_msg
+from logger import log_agent_msg
 from tools import vector_search, web_search
 from langchain.chat_models import init_chat_model
 from langchain.agents import create_agent

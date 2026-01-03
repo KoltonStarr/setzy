@@ -9,6 +9,7 @@ embedding process. This way other orgs can ensure that their calls are understoo
 - Protect the endpoint with oauth / STS connection.
 
 ## To Do (Data Pipeline)
+- Convert to Poetry
 - Refactor the data pipeline to be a long-running process that polls an SQS queue for new audio files to embed. 
 - Refactor the data pipeline to process 10 calls at once with two concurrent threads (5 each thread) then start another batch until all
 have been processed.
