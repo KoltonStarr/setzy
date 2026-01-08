@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Simple S3 bucket for Setzy audio uploads
+
+Resources:
+  SetzyAudioBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'setzy-audio-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+Outputs:
+  BucketName:
+    Description: Name of the S3 bucket
+    Value: !Ref SetzyAudioBucket
+    Export:
+      Name: SetzyAudioBucketName
+  
+  BucketArn:
+    Description: ARN of the S3 bucket
+    Value: !GetAtt SetzyAudioBucket.Arn
+    Export:
+      Name: SetzyAudioBucketArn
