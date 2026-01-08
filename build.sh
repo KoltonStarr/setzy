@@ -12,13 +12,13 @@ NC='\033[0m' # No Color
 
 # Function to display usage
 usage() {
-    echo "Usage: $0 {agent|data_pipeline|frontend|backend}"
+    echo "Usage: $0 {agent|data_pipeline|frontend|uploader}"
     echo ""
     echo "Options:"
     echo "  agent          Build the agent service"
     echo "  data_pipeline  Build the data pipeline service"
     echo "  frontend       Build the frontend service"
-    echo "  backend        Build the backend service"
+    echo "  uploader       Build the uploader service"
     exit 1
 }
 
@@ -52,11 +52,10 @@ case "$COMPONENT" in
         exit 1
         ;;
     
-    backend)
-        echo -e "${BLUE}Building backend service...${NC}"
-        # TODO: Implement backend build
-        echo -e "${RED}Backend build not yet implemented${NC}"
-        exit 1
+    uploader)
+        echo -e "${BLUE}Building uploader service...${NC}"
+        docker build -t setzy-uploader -f uploader/Dockerfile .
+        echo -e "${GREEN}✓ Uploader service built successfully${NC}"
         ;;
     
     *)
