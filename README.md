@@ -13,6 +13,9 @@ other would just be for the agent.
 ## To Do (Backend)
 - DONE
 
+## To Do (Vector DB)
+- DONE
+
 ## To Do (Engineering)
 - Make sure the docker-compose works seamlessly. 
 - Develop a thorough README of how to use the project.
