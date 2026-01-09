@@ -6,7 +6,6 @@ other would just be for the agent.
 --- Need to enforce some sort of schema (maybe for now just make it a suggestion.)
 
 ## To Do (Data Pipeline)
-- Convert to Poetry.
 - Re-do Dockerfile.
 - Refactor the data pipeline to clear out the data dir and transcripts dir when processing is completely done.
 
