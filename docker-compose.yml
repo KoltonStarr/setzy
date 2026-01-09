@@ -37,7 +37,7 @@ services:
       - zipkin
 
   # Setzy Agent
-  setzy-agent:
+  agent:
     build:
       context: .
       dockerfile: ./setzy_agent/Dockerfile

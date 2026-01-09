@@ -20,7 +20,6 @@ other would just be for the agent.
 - Develop a thorough README of how to use the project.
 
 ## Tests
-- Make sure that all of the images can be built from scratch.
 - Make sure the docker-compose works seamlessly. 
 
 ## Poetry Commands
