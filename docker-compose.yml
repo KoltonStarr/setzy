@@ -1,5 +1,5 @@
 services:
-  # OpenTelemetry Collector for observability
+  # For ChromaDB -> OpenTelemetry Collector for observability.
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.111.0
     command: ["--config=/etc/otel-collector-config.yaml"]
@@ -8,7 +8,7 @@ services:
     networks:
       - setzy-network
 
-  # Zipkin for distributed tracing
+  # For ChromaDB -> Zipkin for distributed tracing.
   zipkin:
     image: openzipkin/zipkin
     ports:
@@ -18,7 +18,7 @@ services:
     networks:
       - setzy-network
 
-  # ChromaDB vector database
+  # ChromaDB.
   chromadb:
     image: chromadb/chroma
     container_name: chromadb
@@ -37,54 +37,34 @@ services:
       - zipkin
 
   # Setzy Agent
-  agent:
+  setzy-agent:
     build:
       context: .
-      dockerfile: ./agent/Dockerfile
+      dockerfile: ./setzy_agent/Dockerfile
     container_name: setzy-agent
     env_file:
       - .env
     environment:
       - CHROMADB_HOST=chromadb
-      - CHROMADB_PORT=8000
+    ports:
+      - "8081:8081"
     networks:
       - setzy-network
     depends_on:
       - chromadb
-    stdin_open: true
-    tty: true
-  
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #     args:
-  #       - VITE_USE_MOCK_API=false
-  #       - VITE_API_BASE_URL=http://backend:8000/api
-  #   ports:
-  #     - "3000:80"
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - setzy-network
-  #   restart: unless-stopped
 
-  # backend:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8000:8000"
-  #   environment:
-  #     - S3_BUCKET_NAME=${S3_BUCKET_NAME:-your-bucket-name}
-  #     - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-  #     - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-  #     - AWS_REGION=${AWS_REGION:-us-east-1}
-  #   networks:
-  #     - setzy-network
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./backend:/app
+  # Uploader Service
+  uploader:
+    build:
+      context: .
+      dockerfile: ./uploader/Dockerfile
+    container_name: uploader
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    networks:
+      - setzy-network
 
 networks:
   setzy-network:

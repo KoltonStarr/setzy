@@ -6,14 +6,15 @@ other would just be for the agent.
 --- Need to enforce some sort of schema (maybe for now just make it a suggestion.)
 
 ## To Do (Data Pipeline)
-- Re-do Dockerfile.
-- Refactor the data pipeline to clear out the data dir and transcripts dir when processing is completely done.
+- DONE
 
 ## To Do (Backend)
 - DONE
 
 ## To Do (Vector DB)
 - DONE
+
+## TO DO (Frontend)
 
 ## To Do (Engineering)
 - Make sure the docker-compose works seamlessly. 

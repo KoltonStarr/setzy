@@ -43,5 +43,5 @@ COPY .env ./
 ENV PYTHONUNBUFFERED=1 \
     PATH="/app/.venv/bin:$PATH"
 
-# Default command - run the agent
-CMD ["python", "src/main.py"]
+# Default command - run the agent with FastAPI CLI
+CMD ["fastapi", "run", "src/main.py", "--port", "8081"]
