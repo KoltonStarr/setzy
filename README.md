@@ -15,8 +15,10 @@ other would just be for the agent.
 - DONE
 
 ## TO DO (Frontend)
+- The frontend should have the ability to allow the user to drop one file at a time and have that be sent to the uploader. 
+- The frontend should have a chat interface where it can talk with the setzy_agent.
 
-## To Do (Engineering)
+## To Do (Admin)
 - Develop a thorough README of how to use the project.
 
 ## Tests
