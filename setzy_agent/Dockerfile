@@ -21,7 +21,7 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
 # Copy poetry files
-COPY setzy-agent/pyproject.toml setzy-agent/poetry.lock* ./
+COPY setzy_agent/pyproject.toml setzy_agent/poetry.lock* ./
 
 # Install dependencies
 RUN poetry install --only main --no-root && rm -rf $POETRY_CACHE_DIR
@@ -36,7 +36,7 @@ WORKDIR /app
 COPY --from=builder /app/.venv /app/.venv
 
 # Copy application files
-COPY setzy-agent/src ./src
+COPY setzy_agent/src ./src
 COPY .env ./
 
 # Set environment variables

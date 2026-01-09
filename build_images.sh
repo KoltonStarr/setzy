@@ -34,15 +34,14 @@ COMPONENT=$1
 case "$COMPONENT" in
     agent)
         echo -e "${BLUE}Building agent service...${NC}"
-        docker build -t setzy-agent:latest -f ./agent/Dockerfile .
+        docker build -t setzy-agent:latest -f ./setzy_agent/Dockerfile .
         echo -e "${GREEN}✓ Agent service built successfully${NC}"
         ;;
     
-    data_pipeline)
-        echo -e "${BLUE}Building data pipeline service...${NC}"
-        # TODO: Implement data pipeline build
-        echo -e "${RED}Data pipeline build not yet implemented${NC}"
-        exit 1
+    embedding_pipeline)
+        echo -e "${BLUE}Building embedding pipeline service...${NC}"
+        docker build -t embedding-pipeline -f embedding_pipeline/src/Dockerfile .
+        echo -e "${GREEN}✓ Embedding pipeline service built successfully${NC}"
         ;;
     
     frontend)
