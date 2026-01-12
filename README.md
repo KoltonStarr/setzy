@@ -18,11 +18,13 @@ other would just be for the agent.
 - The frontend should have the ability to allow the user to drop one file at a time and have that be sent to the uploader. 
 - The frontend should have a chat interface where it can talk with the setzy_agent.
 
+## To Do (Engineering)
+- Publish the images and reference them in the docker-compose.
+
 ## To Do (Admin)
 - Develop a thorough README of how to use the project.
 
 ## Tests
-- Test the embedding pipeline running as a containerized process. It should start, run the pipeline, then stop when done.
 - Test the agent running as a containerized process. I should be able to issue curl commands from outside the container and have it respond. 
 - The vector_db will be tested from the last 2 tests to ensure it can talk with both the agent and the pipeline.
 - Test the uploader as a containerized process. I should be able to issue a curl command with a file and it should upload it to S3 just fine. 

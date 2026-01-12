@@ -37,7 +37,6 @@ COPY --from=builder /app/.venv /app/.venv
 
 # Copy application files
 COPY embedding_pipeline/src ./src
-COPY .env ./
 
 # Create data and transcripts directories
 RUN mkdir -p /app/data /app/transcripts

@@ -66,6 +66,23 @@ services:
     networks:
       - setzy-network
 
+  embedding-pipeline:
+    build:
+      context: .
+      dockerfile: ./embedding_pipeline/Dockerfile
+    container_name: embedding-pipeline
+    profiles: ["pipeline"]  # Won't start by default
+    env_file:
+      - .env
+    environment:
+      - CHROMADB_HOST=chromadb
+    volumes:
+      - ~/.aws:/root/.aws:ro
+    networks:
+      - setzy-network
+    depends_on:
+      - chromadb
+
 networks:
   setzy-network:
     driver: bridge

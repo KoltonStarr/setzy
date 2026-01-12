@@ -40,7 +40,7 @@ case "$COMPONENT" in
     
     pipeline)
         echo -e "${BLUE}Building embedding pipeline service...${NC}"
-        docker build -t embedding-pipeline -f embedding_pipeline/src/Dockerfile .
+        docker build -t embedding-pipeline -f embedding_pipeline/Dockerfile .
         echo -e "${GREEN}✓ Embedding pipeline service built successfully${NC}"
         ;;
     

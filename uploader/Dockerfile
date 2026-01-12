@@ -37,7 +37,6 @@ COPY --from=builder /app/.venv /app/.venv
 
 # Copy application files
 COPY uploader/src ./src
-COPY .env ./
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
