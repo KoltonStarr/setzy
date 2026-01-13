@@ -23,9 +23,6 @@ other would just be for the agent.
 - Figure out licensing for open source. 
 - Figure out SEO.
 
-## To Do (Admin)
-- Develop a thorough README of how to use the project.
-
 ## Poetry Commands
 # Commands
 ```python
