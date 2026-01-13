@@ -33,15 +33,15 @@ COMPONENT=$1
 # Build based on component
 case "$COMPONENT" in
     agent)
-        echo -e "${BLUE}Building agent service...${NC}"
+        echo -e "${BLUE}Building setzy agent service...${NC}"
         docker build -t setzy-agent -f ./setzy_agent/Dockerfile .
         echo -e "${GREEN}✓ Agent service built successfully${NC}"
         ;;
     
     pipeline)
-        echo -e "${BLUE}Building embedding pipeline service...${NC}"
-        docker build -t embedding-pipeline -f embedding_pipeline/Dockerfile .
-        echo -e "${GREEN}✓ Embedding pipeline service built successfully${NC}"
+        echo -e "${BLUE}Building setzy pipeline service...${NC}"
+        docker build -t setzy-pipeline -f setzy_pipeline/Dockerfile .
+        echo -e "${GREEN}✓ Setzy pipeline service built successfully${NC}"
         ;;
     
     frontend)
@@ -52,9 +52,9 @@ case "$COMPONENT" in
         ;;
     
     uploader)
-        echo -e "${BLUE}Building uploader service...${NC}"
-        docker build -t setzy-uploader -f uploader/Dockerfile .
-        echo -e "${GREEN}✓ Uploader service built successfully${NC}"
+        echo -e "${BLUE}Building setzy uploader service...${NC}"
+        docker build -t setzy-uploader -f setzy_uploader/Dockerfile .
+        echo -e "${GREEN}✓ Setzy uploader service built successfully${NC}"
         ;;
     
     *)
