@@ -58,7 +58,7 @@ services:
     build:
       context: .
       dockerfile: ./uploader/Dockerfile
-    container_name: uploader
+    container_name: setzy-uploader
     env_file:
       - .env
     volumes:
@@ -68,11 +68,11 @@ services:
     networks:
       - setzy-network
 
-  embedding-pipeline:
+  pipeline:
     build:
       context: .
       dockerfile: ./embedding_pipeline/Dockerfile
-    container_name: embedding-pipeline
+    container_name: setzy-pipeline
     profiles: ["pipeline"]  # Won't start by default
     env_file:
       - .env

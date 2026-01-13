@@ -1,5 +1,5 @@
 [project]
-name = "uploader"
+name = "setzy_uploader"
 version = "1.0.0"
 description = "Setzy audio file uploader."
 authors = [
