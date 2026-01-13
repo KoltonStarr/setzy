@@ -21,7 +21,7 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
 # Copy poetry files
-COPY uploader/pyproject.toml uploader/poetry.lock* ./
+COPY setzy_uploader/pyproject.toml setzy_uploader/poetry.lock* ./
 
 # Install dependencies
 RUN poetry install --only main --no-root && rm -rf $POETRY_CACHE_DIR
@@ -36,7 +36,7 @@ WORKDIR /app
 COPY --from=builder /app/.venv /app/.venv
 
 # Copy application files
-COPY uploader/src ./src
+COPY setzy_uploader/src ./src
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \

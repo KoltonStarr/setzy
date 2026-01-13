@@ -57,7 +57,7 @@ services:
   uploader:
     build:
       context: .
-      dockerfile: ./uploader/Dockerfile
+      dockerfile: ./setzy_uploader/Dockerfile
     container_name: setzy-uploader
     env_file:
       - .env
@@ -71,7 +71,7 @@ services:
   pipeline:
     build:
       context: .
-      dockerfile: ./embedding_pipeline/Dockerfile
+      dockerfile: ./setzy_pipeline/Dockerfile
     container_name: setzy-pipeline
     profiles: ["pipeline"]  # Won't start by default
     env_file:

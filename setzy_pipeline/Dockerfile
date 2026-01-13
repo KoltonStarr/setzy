@@ -21,7 +21,7 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
 # Copy poetry files
-COPY embedding_pipeline/pyproject.toml embedding_pipeline/poetry.lock* ./
+COPY setzy_pipeline/pyproject.toml setzy_pipeline/poetry.lock* ./
 
 # Install dependencies
 RUN poetry install --only main --no-root && rm -rf $POETRY_CACHE_DIR
@@ -36,7 +36,7 @@ WORKDIR /app
 COPY --from=builder /app/.venv /app/.venv
 
 # Copy application files
-COPY embedding_pipeline/src ./src
+COPY setzy_pipeline/src ./src
 
 # Create data and transcripts directories
 RUN mkdir -p /app/data /app/transcripts
