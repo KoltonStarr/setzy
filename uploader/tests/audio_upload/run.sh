@@ -15,12 +15,12 @@ fi
 # Get the filename for the form field
 FILENAME=$(basename "$WAV_FILE")
 
-echo "Uploading $FILENAME to http://127.0.0.1:8000/upload..."
+echo "Uploading $FILENAME to http://localhost:8080/upload..."
 
 # Send POST request with the .wav file
 curl -X POST \
   -F "file=@$WAV_FILE;type=audio/wav" \
-  http://127.0.0.1:8000/upload
+  http://localhost:8080/upload
 
 echo ""
 echo "Upload complete!"
