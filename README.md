@@ -24,9 +24,6 @@ other would just be for the agent.
 ## To Do (Admin)
 - Develop a thorough README of how to use the project.
 
-## Tests
-- Test the uploader as a containerized process. I should be able to issue a curl command with a file and it should upload it to S3 just fine. 
-
 ## Poetry Commands
 # Commands
 ```python
