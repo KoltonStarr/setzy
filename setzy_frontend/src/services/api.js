@@ -8,6 +8,17 @@ import * as mockApi from './mockApi'
 // Determine if we should use mocks
 const USE_MOCKS = import.meta.env.VITE_USE_MOCK_API !== 'false'
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'
+const UPLOADER_BASE_URL = import.meta.env.VITE_UPLOADER_BASE_URL || 'http://localhost:8080'
+const AGENT_BASE_URL = import.meta.env.VITE_AGENT_BASE_URL || 'http://localhost:8081'
+
+/**
+ * Generate a unique file ID
+ */
+const generateFileId = (filename) => {
+  const timestamp = Date.now()
+  const random = Math.random().toString(36).substring(2, 9)
+  return `${timestamp}-${random}-${filename}`
+}
 
 /**
  * Upload audio file
@@ -20,7 +31,7 @@ export const uploadAudioFile = async (file) => {
   const formData = new FormData()
   formData.append('file', file)
 
-  const response = await fetch(`${API_BASE_URL}/audio/upload`, {
+  const response = await fetch(`${UPLOADER_BASE_URL}/upload`, {
     method: 'POST',
     body: formData,
   })
@@ -29,7 +40,16 @@ export const uploadAudioFile = async (file) => {
     throw new Error('Upload failed')
   }
 
-  return response.json()
+  const result = await response.json()
+  
+  // Generate fileId on frontend since backend doesn't return one
+  const fileId = generateFileId(file.name)
+  
+  return {
+    fileId,
+    status: 'uploaded',
+    message: result.message || 'File uploaded successfully',
+  }
 }
 
 /**
@@ -135,6 +155,35 @@ export const waitForTranscription = async (fileId, onProgress) => {
 
   // Real implementation would poll the status endpoint
   return mockApi.waitForTranscription(fileId, onProgress)
+}
+
+/**
+ * Send chat message to agent API
+ * @param {string} message - User's message
+ * @param {string|null} threadId - Optional thread ID for conversation continuity
+ * @returns {Promise<{thread_id: string, message: string}>}
+ */
+export const sendChatMessageToAgent = async (message, threadId = null) => {
+  if (USE_MOCKS) {
+    return mockApi.sendChatMessageToAgent(message, threadId)
+  }
+
+  const response = await fetch(`${AGENT_BASE_URL}/chat`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      message,
+      thread_id: threadId,
+    }),
+  })
+
+  if (!response.ok) {
+    throw new Error('Failed to send message to agent')
+  }
+
+  return response.json()
 }
 
 

@@ -29,7 +29,7 @@ function FileDropzone({ onFilesAccepted, files = [] }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: ACCEPTED_AUDIO_TYPES,
-    multiple: true,
+    multiple: false,
   })
 
   const processedCount = files.filter((f) => f.status === 'completed').length
@@ -110,10 +110,10 @@ function FileDropzone({ onFilesAccepted, files = [] }) {
           ) : (
             <>
               <p className="dropzone-text">
-                Drag & drop audio files here, or click to select
+                Drag & drop an audio file here, or click to select
               </p>
               <p className="dropzone-subtext">
-                Supports MP3, WAV, M4A, OGG, WebM, AAC, FLAC, MP4, MOV
+                One file at a time • Supports MP3, WAV, M4A, OGG, WebM, AAC, FLAC, MP4, MOV
               </p>
             </>
           )}

@@ -6,85 +6,39 @@ import './App.css'
 
 function App() {
   const [files, setFiles] = useState([])
+  const [generalChat, setGeneralChat] = useState({
+    messages: [],
+    threadId: null,
+    isMinimized: false,
+  })
 
   const handleFilesAccepted = useCallback(async (acceptedFiles) => {
-    // Process each file
-    for (const file of acceptedFiles) {
-      try {
-        // Upload file first to get fileId from API
-        const uploadResult = await api.uploadAudioFile(file)
-        const fileId = uploadResult.fileId
+    // Process only the first file (single file upload)
+    const file = acceptedFiles[0]
+    if (!file) return
 
-        // Create initial file entry
-        const newFile = {
-          id: fileId,
-          file: file,
-          name: file.name,
-          status: 'uploading',
-          transcript: null,
-          messages: [],
-          isMinimized: false,
-          createdAt: new Date().toISOString(),
-        }
+    try {
+      // Upload file to uploader service
+      const uploadResult = await api.uploadAudioFile(file)
+      const fileId = uploadResult.fileId
 
-        // Add file to state
-        setFiles((prev) => [newFile, ...prev])
-        
-        // Update status to transcribing
-        setFiles((prev) =>
-          prev.map((f) =>
-            f.id === fileId ? { ...f, status: 'transcribing' } : f
-          )
-        )
-
-        // Start transcription
-        await api.startTranscription(fileId)
-
-        // Wait for transcription to complete with progress updates
-        await api.waitForTranscription(fileId, (status) => {
-          setFiles((prev) =>
-            prev.map((f) =>
-              f.id === fileId
-                ? {
-                    ...f,
-                    status: status.status,
-                    transcript: status.transcript || f.transcript,
-                  }
-                : f
-            )
-          )
-        })
-
-        // Transcription complete - move to top and minimize
-        setFiles((prev) => {
-          const updated = prev.map((f) =>
-            f.id === fileId
-              ? {
-                  ...f,
-                  status: 'completed',
-                  isMinimized: true,
-                }
-              : f
-          )
-          // Move completed file to the top
-          const completedFile = updated.find((f) => f.id === fileId)
-          if (completedFile) {
-            const withoutCompleted = updated.filter((f) => f.id !== fileId)
-            return [completedFile, ...withoutCompleted]
-          }
-          return updated
-        })
-      } catch (error) {
-        console.error('Error processing file:', file.name, error)
-        // Find and update the file that failed
-        setFiles((prev) =>
-          prev.map((f) =>
-            f.name === file.name && f.status === 'uploading'
-              ? { ...f, status: 'error' }
-              : f
-          )
-        )
+      // Create initial file entry
+      const newFile = {
+        id: fileId,
+        file: file,
+        name: file.name,
+        status: 'completed', // File is uploaded, ready for chat
+        transcript: null,
+        messages: [],
+        isMinimized: false,
+        createdAt: new Date().toISOString(),
       }
+
+      // Add file to state
+      setFiles((prev) => [newFile, ...prev])
+    } catch (error) {
+      console.error('Error uploading file:', file.name, error)
+      // Could show error notification here
     }
   }, [])
 
@@ -116,15 +70,15 @@ function App() {
       )
     )
 
-    // Get AI response
+    // Get AI response (using agent API)
     try {
-      const response = await api.sendChatMessage(fileId, message)
+      const response = await api.sendChatMessageToAgent(message, null)
       
       const assistantMessage = {
-        id: response.messageId,
+        id: `${Date.now()}`,
         role: 'assistant',
-        content: response.response,
-        timestamp: response.timestamp,
+        content: response.message,
+        timestamp: new Date().toISOString(),
       }
 
       setFiles((prev) =>
@@ -157,6 +111,59 @@ function App() {
         )
       )
     }
+  }, [])
+
+  const handleGeneralChatMessage = useCallback(async (message) => {
+    // Add user message immediately
+    const userMessage = {
+      id: `${Date.now()}`,
+      role: 'user',
+      content: message,
+      timestamp: new Date().toISOString(),
+    }
+
+    setGeneralChat((prev) => ({
+      ...prev,
+      messages: [...prev.messages, userMessage],
+    }))
+
+    // Get AI response from agent API
+    try {
+      const response = await api.sendChatMessageToAgent(message, generalChat.threadId)
+      
+      const assistantMessage = {
+        id: `${Date.now()}`,
+        role: 'assistant',
+        content: response.message,
+        timestamp: new Date().toISOString(),
+      }
+
+      setGeneralChat((prev) => ({
+        ...prev,
+        messages: [...prev.messages, assistantMessage],
+        threadId: response.thread_id, // Update thread ID for continuity
+      }))
+    } catch (error) {
+      console.error('Error sending message to agent:', error)
+      // Add error message
+      const errorMessage = {
+        id: `${Date.now()}`,
+        role: 'assistant',
+        content: 'Sorry, I encountered an error. Please try again.',
+        timestamp: new Date().toISOString(),
+      }
+      setGeneralChat((prev) => ({
+        ...prev,
+        messages: [...prev.messages, errorMessage],
+      }))
+    }
+  }, [generalChat.threadId])
+
+  const handleToggleGeneralChatMinimize = useCallback(() => {
+    setGeneralChat((prev) => ({
+      ...prev,
+      isMinimized: !prev.isMinimized,
+    }))
   }, [])
 
   const handleExport = useCallback((fileId, format) => {
@@ -235,22 +242,33 @@ function App() {
             />
           </aside>
           <section className="app-chats">
-            {files.length === 0 ? (
+            {/* General Chat - always show */}
+            <ChatColumn
+              key="general-chat"
+              isGeneralChat={true}
+              messages={generalChat.messages}
+              isMinimized={generalChat.isMinimized}
+              onToggleMinimize={handleToggleGeneralChatMinimize}
+              onAddMessage={handleGeneralChatMessage}
+            />
+            {/* File-specific chats */}
+            {files.map((fileObj) => (
+              <ChatColumn
+                key={fileObj.id}
+                file={fileObj}
+                messages={fileObj.messages}
+                isMinimized={fileObj.isMinimized}
+                onToggleMinimize={() => handleToggleMinimize(fileObj.id)}
+                onAddMessage={(message) =>
+                  handleAddMessage(fileObj.id, message)
+                }
+                onExport={(format) => handleExport(fileObj.id, format)}
+              />
+            ))}
+            {files.length === 0 && generalChat.messages.length === 0 && (
               <div className="empty-state">
-                <p>Upload audio files to start transcribing</p>
+                <p>Upload an audio file or start chatting</p>
               </div>
-            ) : (
-              files.map((fileObj) => (
-                <ChatColumn
-                  key={fileObj.id}
-                  file={fileObj}
-                  onToggleMinimize={() => handleToggleMinimize(fileObj.id)}
-                  onAddMessage={(message) =>
-                    handleAddMessage(fileObj.id, message)
-                  }
-                  onExport={(format) => handleExport(fileObj.id, format)}
-                />
-              ))
             )}
           </section>
         </div>

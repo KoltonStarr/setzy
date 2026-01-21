@@ -252,3 +252,41 @@ export const waitForTranscription = async (fileId, onProgress) => {
   })
 }
 
+// Mock thread storage for agent chat
+const mockThreads = new Map()
+
+/**
+ * Send a chat message to the agent API
+ * @param {string} message - User's message
+ * @param {string|null} threadId - Optional thread ID for conversation continuity
+ * @returns {Promise<{thread_id: string, message: string}>}
+ */
+export const sendChatMessageToAgent = async (message, threadId = null) => {
+  await delay(800 + Math.random() * 1200) // Simulate AI processing time (0.8-2s)
+
+  // Generate or use thread ID
+  const currentThreadId = threadId || `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+  
+  // Get or create thread messages
+  if (!mockThreads.has(currentThreadId)) {
+    mockThreads.set(currentThreadId, [])
+  }
+  const threadMessages = mockThreads.get(currentThreadId)
+  threadMessages.push({ role: 'user', content: message })
+
+  // Generate a mock response
+  const responses = [
+    `I understand you're asking about "${message}". Let me help you with that.`,
+    `That's an interesting question! Regarding "${message}", I can provide some insights.`,
+    `Thanks for your question about "${message}". Here's what I think...`,
+    `I see you're interested in "${message}". Let me share some relevant information.`,
+  ]
+
+  const response = responses[Math.floor(Math.random() * responses.length)]
+  threadMessages.push({ role: 'assistant', content: response })
+
+  return {
+    thread_id: currentThreadId,
+    message: response,
+  }
+}

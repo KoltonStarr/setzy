@@ -4,7 +4,7 @@ import ChatMessages from './ChatMessages'
 import ChatInput from './ChatInput'
 import './ChatColumn.css'
 
-function ChatColumn({ file, onToggleMinimize, onAddMessage, onExport }) {
+function ChatColumn({ file, messages = [], isMinimized = false, onToggleMinimize, onAddMessage, onExport, isGeneralChat = false }) {
   const [inputValue, setInputValue] = useState('')
   const messagesEndRef = useRef(null)
 
@@ -13,10 +13,10 @@ function ChatColumn({ file, onToggleMinimize, onAddMessage, onExport }) {
   }
 
   useEffect(() => {
-    if (!file.isMinimized) {
+    if (!isMinimized) {
       scrollToBottom()
     }
-  }, [file.messages, file.isMinimized])
+  }, [messages, isMinimized])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -27,7 +27,10 @@ function ChatColumn({ file, onToggleMinimize, onAddMessage, onExport }) {
   }
 
   const getStatusColor = () => {
-    switch (file.status) {
+    if (isGeneralChat) {
+      return 'var(--success)'
+    }
+    switch (file?.status) {
       case 'uploading':
         return 'var(--warning)'
       case 'transcribing':
@@ -42,7 +45,10 @@ function ChatColumn({ file, onToggleMinimize, onAddMessage, onExport }) {
   }
 
   const getStatusText = () => {
-    switch (file.status) {
+    if (isGeneralChat) {
+      return 'Ready'
+    }
+    switch (file?.status) {
       case 'uploading':
         return 'Uploading...'
       case 'transcribing':
@@ -56,29 +62,38 @@ function ChatColumn({ file, onToggleMinimize, onAddMessage, onExport }) {
     }
   }
 
+  const getFileName = () => {
+    if (isGeneralChat) {
+      return 'General Chat'
+    }
+    return file?.name || 'Unknown File'
+  }
+
+  const canChat = isGeneralChat || file?.status === 'completed'
+
   return (
-    <div className={`chat-column ${file.isMinimized ? 'minimized' : ''}`}>
+    <div className={`chat-column ${isMinimized ? 'minimized' : ''}`}>
       <ChatHeader
-        fileName={file.name}
+        fileName={getFileName()}
         status={getStatusText()}
         statusColor={getStatusColor()}
-        isMinimized={file.isMinimized}
+        isMinimized={isMinimized}
         onToggleMinimize={onToggleMinimize}
         onExport={onExport}
-        canExport={file.status === 'completed'}
+        canExport={!isGeneralChat && file?.status === 'completed'}
       />
-      {!file.isMinimized && (
+      {!isMinimized && (
         <div className="chat-column-content">
-          <ChatMessages messages={file.messages} />
+          <ChatMessages messages={messages} />
           <div ref={messagesEndRef} />
-          {file.status === 'completed' && (
+          {canChat && (
             <ChatInput
               value={inputValue}
               onChange={setInputValue}
               onSubmit={handleSubmit}
             />
           )}
-          {file.status !== 'completed' && (
+          {!canChat && (
             <div className="chat-status-message">
               <div className="status-spinner"></div>
               <p>{getStatusText()}</p>
