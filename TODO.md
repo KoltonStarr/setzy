@@ -1,19 +1,3 @@
-## To Do (Agent)
-- Make the system prompt structured:
---- I could put it at the root of the project in 2 flavors. One prompt that is shared between the two and then the 
-other would just be for the agent. 
---- Make one unified system prompt that both the data pipeline and the agent use. 
---- Need to enforce some sort of schema (maybe for now just make it a suggestion.)
-
-## To Do (Data Pipeline)
-- DONE
-
-## To Do (Backend)
-- DONE
-
-## To Do (Vector DB)
-- DONE
-
 ## TO DO (Frontend)
 - The frontend should have the ability to allow the user to drop one file at a time and have that be sent to the uploader. 
 - The frontend should have a chat interface where it can talk with the setzy_agent.
