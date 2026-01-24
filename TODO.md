@@ -2,6 +2,11 @@
 - The frontend should have the ability to allow the user to drop one file at a time and have that be sent to the uploader. 
 - The frontend should have a chat interface where it can talk with the setzy_agent.
 
+## To Do (CLI Client)
+- Develop a simple CLI client as an alternative to the frontend.
+- It should be able to send files to the uploader
+- It should be able to talk with the agent in a loop and use the API. 
+
 ## To Do (Engineering)
 - Publish the images and reference them in the docker-compose.
 - Figure out licensing for open source. 

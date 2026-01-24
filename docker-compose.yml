@@ -38,9 +38,7 @@ services:
 
   # Setzy Agent
   agent:
-    build:
-      context: .
-      dockerfile: ./setzy_agent/Dockerfile
+    image: koltonstarr117/setzy-agent
     container_name: setzy-agent
     env_file:
       - .env
@@ -55,9 +53,7 @@ services:
 
   # Uploader Service
   uploader:
-    build:
-      context: .
-      dockerfile: ./setzy_uploader/Dockerfile
+    image: koltonstarr117/setzy-uploader
     container_name: setzy-uploader
     env_file:
       - .env
@@ -69,9 +65,7 @@ services:
       - setzy-network
 
   pipeline:
-    build:
-      context: .
-      dockerfile: ./setzy_pipeline/Dockerfile
+    image: koltonstarr117/setzy-pipeline
     container_name: setzy-pipeline
     profiles: ["pipeline"]  # Won't start by default
     env_file:
