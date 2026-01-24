@@ -7,6 +7,8 @@
     "start": "vinxi start"
   },
   "dependencies": {
+    "@chatscope/chat-ui-kit-react": "^2.1.1",
+    "@chatscope/chat-ui-kit-styles": "^1.4.0",
     "@solidjs/router": "^0.15.0",
     "@solidjs/start": "^1.1.0",
     "solid-js": "^1.9.5",
