@@ -1,13 +1,3 @@
-## To Do (CLI Client)
-- Develop a simple CLI client as an alternative to the frontend.
-- It should be able to send files to the uploader
-- It should be able to talk with the agent in a loop and use the API. 
-
-## To Do (Engineering)
-- Publish the images and reference them in the docker-compose.
-- Figure out licensing for open source. 
-- Figure out SEO.
-
 ## Poetry Commands
 # Commands
 ```python
@@ -50,3 +40,4 @@ ls ~/Library/Caches/pypoetry/virtualenvs/
 - Add real persistence for the agent's memory.  
 - Protect the endpoint with oauth / STS connection.
 - Add query expansion / transformation logic so that the query is embedded better to improve results.
+- Containerize the CLI client. 

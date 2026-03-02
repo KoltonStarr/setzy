@@ -1,0 +1,1 @@
+docker compose -d --profile pipeline up 
