@@ -46,5 +46,7 @@ ls ~/Library/Caches/pypoetry/virtualenvs/
 - LangGraph MemorySaver
 
 ## Backlog
-- Add configuration to control the size of the agent's memory. Add code to clear message history when memory limit has been reached. 
+- Add configuration to control the size of the agent's memory. Add code to clear message history when memory limit has been reached.
+- Add real persistence for the agent's memory.  
 - Protect the endpoint with oauth / STS connection.
+- Add query expansion / transformation logic so that the query is embedded better to improve results.

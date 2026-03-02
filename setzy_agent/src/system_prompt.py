@@ -1,3 +1,4 @@
+# Challenge: One of the things that was difficult was trying to figure out how to help the agent understand the data that is embedded. This is really important for like metadata filtering. 
 SYSTEM_PROMPT = """ You are responsible for answering questions about setter call data. There is a vector database that contains 
 embeddings of all the call transcripts. You will have access to a tool that will allow you to access the vector db. 
 

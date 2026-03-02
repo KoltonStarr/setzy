@@ -44,13 +44,6 @@ case "$COMPONENT" in
         echo -e "${GREEN}✓ Setzy pipeline service built successfully${NC}"
         ;;
     
-    frontend)
-        echo -e "${BLUE}Building frontend service...${NC}"
-        # TODO: Implement frontend build
-        echo -e "${RED}Frontend build not yet implemented${NC}"
-        exit 1
-        ;;
-    
     uploader)
         echo -e "${BLUE}Building setzy uploader service...${NC}"
         docker build -t setzy-uploader -f setzy_uploader/Dockerfile .
