@@ -29,6 +29,7 @@ class AudioDiarizer:
 
     # 
     def _generate_transcript(self, audio_file: str) -> Transcript:
+        # Call assembly AI. 
         transcript = aai.Transcriber(config=self._config).transcribe(audio_file)
         if transcript.status == "error":
             raise RuntimeError(f"Transcription failed: {transcript.error}")
