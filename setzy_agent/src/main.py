@@ -11,13 +11,17 @@ from langchain.messages import ToolMessage, AIMessage, HumanMessage
 from dotenv import load_dotenv
 load_dotenv()
 
+# Simple schema for input. 
+# If thread_id exists then it is a continuation of an existing conversation.
 class ChatMessage(BaseModel):
     message: str
     thread_id: str | None = None
 
 app = FastAPI()
 
-# Global memory.
+# in-memory Global memory. key is thread_id. 
+# Note: Figuring out memory was a bit of a challenge. They way the model outputs events took some time to understand. 
+# Ideally, persistence and memory should last even when the agent is not running. LangChain has functionality to provide memory.
 all_messages: dict[str, list] = {}
 
 # Instantiate Agent.
