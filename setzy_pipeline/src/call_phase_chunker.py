@@ -33,16 +33,19 @@ class CallPhaseChunker:
         self.call_identifier = call_identifier
         self._init_llm()
 
+    # Initializing the LLM with structured output to ensure that it gives me a list of Documents. 
     def _init_llm(self) -> None:
         base_llm = ChatOpenAI(model="gpt-4o", temperature=0)
         self.llm = base_llm.with_structured_output(ResponseFormat)
 
+    # I'm using an LLM call to help me chunk the audio file into call phase documents.
     def _get_raw_results(self):
         return self.llm.invoke([
             {"role": "system", "content": system_prompt.CALL_PHASE_SYSTEM_PROMPT},
             {"role": "user", "content": f"Here is the transcript:\n\n{self.transcript_text}"}
         ])
     
+    # Parse the structured output of the LLM and create Document objects from each output section.
     def _parse_results_to_documents(self, raw_results) -> list[Document]:
         call_phase_documents: list[Document] = []
         for i, call_phase in enumerate(raw_results.call_phases):
